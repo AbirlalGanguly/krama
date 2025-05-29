@@ -73,13 +73,6 @@
       return [canvas.clientWidth, canvas.clientHeight];
     }
 
-    const anchors = [
-      { t: 0,             label: 'लयः',  dx: 10,  dy: -5  },
-      { t: Math.PI / 2,   label: 'प्रसरः',  dx: -15, dy: -25 },
-      { t: Math.PI,       label: 'स्थितिः',     dx: -30, dy: -5  },
-      { t: 3 * Math.PI/2, label: 'विश्रमः', dx: -19, dy: 35  }
-    ];
-
     const movers = [ 
       { offset: 0, color: 'rgba(255,0,0,1)', label: 'सृष्टिः' }, 
       { offset: 2, color: 'rgba(255,255,153,1)', label: 'स्थितिः' }, 
@@ -112,6 +105,15 @@
         ctx.fillStyle = '#111';
         ctx.font = '16px Noto Sans Devanagari';
         ctx.fillText(`कला ${i + 1}`, p.x - 15, p.y - 15);
+
+        // Add fixed anchors
+        if (i === 0 || i === 11) {
+          ctx.fillText('प्रसरः', p.x - 10, p.y + 30);
+        } else if (i === 4) {
+          ctx.fillText('स्थितिः', p.x - 20, p.y + 20);
+        } else if (i === 8) {
+          ctx.fillText('लयः', p.x - 10, p.y + 20);
+        }
       }
     }
 
@@ -142,6 +144,14 @@
         ctx.fillStyle = colors[i];
         ctx.fill();
       }
+
+      // Center marker for विश्रमः
+      ctx.fillStyle = '#222';
+      ctx.font = '16px Noto Sans Devanagari';
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.fillText('विश्रमः', centerX + 15, centerY + 5);
     }
 
     function draw(){
@@ -161,14 +171,6 @@
       ctx.stroke();
 
       drawKalāRings();
-
-      ctx.fillStyle = '#222';
-      ctx.font = '18px Noto Sans Devanagari';
-      anchors.forEach(a => {
-        const p = lemniscate(a.t);
-        ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, 2 * Math.PI); ctx.fill();
-        ctx.fillText(a.label, p.x + a.dx, p.y + a.dy);
-      });
 
       // Draw trails with inherited color from next mover
       drawTrail(movers[0], movers[2].color, movers[2].offset - movers[0].offset); // सृष्टिः ← भङ्गः
@@ -196,4 +198,3 @@
   </script>
 </body>
 </html>
-
